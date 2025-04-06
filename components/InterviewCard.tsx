@@ -5,9 +5,9 @@ import Link from 'next/link';
 import { getRandomInterviewCover } from '@/lib/utils';
 import DisplayTechIcons from './DisplayTechIcons';
 
-const InterviewCard = ({interviewId, userId, type, role, techstack, createdAt}: InterviewCardProps) => {
+const InterviewCard = ({ interviewId, userId, type, role, techstack, createdAt }: InterviewCardProps) => {
   const feedback = null as Feedback | null;
-  const normalizedType = /mix/gi.test(type) ? "Mixed" : type ;
+  const normalizedType = /mix/gi.test(type) ? "Mixed" : type;
   const formattedDate = dayjs(feedback?.createdAt || createdAt || Date.now()).format("MMM D, YYYY")
 
   return (
@@ -16,10 +16,10 @@ const InterviewCard = ({interviewId, userId, type, role, techstack, createdAt}: 
         <div>
           {/* Type Badge */}
           <div
-            // className={cn(
-            //   "absolute top-0 right-0 w-fit px-4 py-2 rounded-bl-lg",
-            //   badgeColor
-            // )}
+            className={
+              "absolute top-0 right-0 w-fit px-4 py-2 rounded-bl-lg"
+              //   badgeColor
+            }
           >
             <p className="badge-text ">{normalizedType}</p>
           </div>
