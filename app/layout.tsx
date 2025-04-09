@@ -11,6 +11,9 @@ const monaSans = Mona_Sans({
 export const metadata: Metadata = {
   title: "Interview With AI",
   description: "An AI-powered platform for preparing for mock interview",
+  icons: {
+    icon: "/robot.png",
+  },
 };
 
 export default function RootLayout({
