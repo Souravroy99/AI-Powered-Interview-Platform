@@ -150,9 +150,12 @@ const Agent = ({ userName, userId, type }) => {
           callStatus !== CallStatus.ACTIVE ? (
             <button className='relative btn-call' onClick={handleCall}>
               <span className={cn('absolute animate-ping rounded-full opacity-75', callStatus !== CallStatus.CONNECTING && "hidden")} />
-              <span>
-                {isCallInactiveOrFinished ? "Call" : "..."}
-              </span>
+              {
+                isCallInactiveOrFinished ? 
+                (<span>Call</span>) :
+                (<span className='text-black'>. . . . .</span>)
+              }
+
             </button>
           ) : (
             <button className='btn-disconnect' onClick={handleDisconnect}>
