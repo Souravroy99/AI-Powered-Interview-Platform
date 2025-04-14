@@ -71,11 +71,11 @@ const page = async () => {
       </section>
 
       <section className="flex flex-col gap-6 mt-8">
-        <h2>Take Interviews</h2>
+        <h2>Take an Interview</h2>
 
         <div className="interviews-section">
-          {/* {hasUpcomingInterviews ? (
-            allInterview?.map((interview) => (
+          { hasUpcomingInterviews ? (
+            latestInterviews?.map((interview) => (
               <InterviewCard
                 key={interview.id}
                 userId={user?.id}
@@ -88,7 +88,8 @@ const page = async () => {
             ))
           ) : (
             <p>There are no interviews available</p>
-          )} */}
+          )} 
+
         </div>
       </section>
     </>
