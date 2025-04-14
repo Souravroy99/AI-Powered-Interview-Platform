@@ -17,11 +17,11 @@ const InterviewCard = ({ interviewId, userId, type, role, techstack, createdAt }
           {/* Type Badge */}
           <div
             className={
-              "absolute top-0 right-0 w-fit px-4 py-2 rounded-bl-lg"
-              //   badgeColor
+              "absolute top-0 right-0 w-fit px-4 py-2 rounded-bl-lg bg-violet-500"
+                // badgeColor
             }
           >
-            <p className="badge-text ">{normalizedType}</p>
+            <p className="badge-text text-[17px]">{normalizedType}</p>
           </div>
 
           {/* Cover Image */}
