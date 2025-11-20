@@ -41,7 +41,7 @@ interface FunctionCallResultMessage extends BaseMessage {
     forwardToClientEnabled?: boolean;
     result: unknown;
     [a: string]: unknown;
-  };
+  }; 
 }
 
 type Message =

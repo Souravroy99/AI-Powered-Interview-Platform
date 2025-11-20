@@ -1,3 +1,0 @@
-PORT=5000
-MONGODB_URI=mongodb+srv://AM:sourav@cluster0.xagsggb.mongodb.net/AM?retryWrites=true&w=majority&appName=Cluster
-JWT_SECRET_KEY=IAMLEARNINGJWT>>MERNSTAC
