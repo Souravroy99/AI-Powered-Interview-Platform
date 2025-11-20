@@ -54,7 +54,7 @@ const AuthForm = ({ type }) => {
                     idToken
                 });
 
-                toast.success("Sign in successfully.");
+                toast.success("Signed in successfully! Welcome back.");
                 router.push("/");
             } else {
                 const { name, email, password } = values;
@@ -72,7 +72,7 @@ const AuthForm = ({ type }) => {
                     toast.error(result?.message);
                     return;
                 }
-
+                 
                 toast.success("Account created successfully. Please sign in.");
                 router.push("/sign-in");
             }
@@ -102,7 +102,7 @@ const AuthForm = ({ type }) => {
                         {!isSignIn && (
                             <FormField
                                 control={form.control}
-                                name="name"
+                                name="name"          
                                 label="Name"
                                 placeholder="Your Name"
                                 type="text"

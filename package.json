@@ -15,7 +15,7 @@
     "@radix-ui/react-label": "^2.1.2",
     "@radix-ui/react-slot": "^1.1.2",
     "@vapi-ai/web": "^2.2.5",
-    "ai": "^4.3.4",
+    "ai": "^4.3.4", 
     "autoprefixer": "^10.4.21",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",

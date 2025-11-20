@@ -12,7 +12,6 @@ import React from "react";
 const Page = async () => {
   const user = await getCurrentUser();
 
-  // Parallel Fetching (no TS non-null operators)
   const [userInterviews, latestInterviews] = await Promise.all([
     getInterviewsByUserId(user?.id),
     getLatestInterviews({ userId: user?.id }),
@@ -24,6 +23,8 @@ const Page = async () => {
 
   return (
     <>
+
+    {/* Header */}
       <section className="card-cta">
         <div className="flex flex-col gap-6 max-w-lg">
           <h2>Get Interview-Ready with AI-Powered Practice & Feedback</h2>
@@ -38,13 +39,14 @@ const Page = async () => {
 
         <Image
           src="/robot.png"
-          alt="robo-dude"
+          alt="robo-image"
           width={400}
           height={400}
           className="max-sm:hidden"
         />
       </section>
-
+      
+    {/* My Interviews */}
       <section className="flex flex-col gap-6 mt-8">
         <h2>Your Interviews</h2>
 
@@ -67,6 +69,7 @@ const Page = async () => {
         </div>
       </section>
 
+    {/* All Past Interviews */}
       <section className="flex flex-col gap-6 mt-8">
         <h2>Take an Interview</h2>
 
@@ -88,6 +91,7 @@ const Page = async () => {
           )}
         </div>
       </section>
+      
     </>
   );
 };
