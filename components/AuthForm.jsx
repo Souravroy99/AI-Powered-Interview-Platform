@@ -3,7 +3,6 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 
 import Image from "next/image";
-
 import { z } from "zod"
 
 import { Button } from "@/components/ui/button"
@@ -16,78 +15,74 @@ import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "fire
 import { auth } from "@/firebase/client";
 import { signIn, signup } from "@/lib/actions/auth.action";
 
-const authFormSchema = (type: FormType) => {
+const authFormSchema = (type) => {
     return z.object({
         name: type === "sign-in" ? z.string().optional() : z.string().min(3),
         email: z.string().email(),
         password: z.string().min(3)
-    })
-}
+    });
+};
 
-
-
-const AuthForm = ({ type }: { type: FormType }) => {
-    const router = useRouter()
+const AuthForm = ({ type }) => {
+    const router = useRouter();
     const formSchema = authFormSchema(type);
 
-    const form = useForm<z.infer<typeof formSchema>>({
+    const form = useForm({
         resolver: zodResolver(formSchema),
         defaultValues: {
             name: "",
             email: "",
             password: ""
         },
-    })
+    });
 
-    async function onSubmit(values: z.infer<typeof formSchema>) {
+    async function onSubmit(values) {
         try {
-            if (type === 'sign-in') 
-            {
-                const {email, password} = values
+            if (type === "sign-in") {
+                const { email, password } = values;
                 const userCredential = await signInWithEmailAndPassword(auth, email, password);
 
                 const idToken = await userCredential.user.getIdToken();
 
-                if(!idToken) {
-                    toast.error("Sign in failed")
-                    return ;
+                if (!idToken) {
+                    toast.error("Sign in failed");
+                    return;
                 }
 
                 await signIn({
-                    email, idToken
-                })
+                    email,
+                    idToken
+                });
 
                 toast.success("Sign in successfully.");
-                router.push("/")
-            }
-            else {
-                const {name, email, password} = values;
+                router.push("/");
+            } else {
+                const { name, email, password } = values;
 
-                const userCredentials = await createUserWithEmailAndPassword(auth, email, password)
+                const userCredentials = await createUserWithEmailAndPassword(auth, email, password);
 
                 const result = await signup({
                     uid: userCredentials.user.uid,
-                    name: name!,
+                    name,
                     email,
                     password,
-                })
+                });
 
-                if(!result?.success) {
+                if (!result?.success) {
                     toast.error(result?.message);
-                    return ;
+                    return;
                 }
 
                 toast.success("Account created successfully. Please sign in.");
-                router.push("/sign-in")
+                router.push("/sign-in");
             }
-        }
-        catch (error) {
-            console.log(error)
-            toast.error(`Invalid Credentials! or Server Down!`)
+        } catch (error) {
+            console.log(error);
+            toast.error("Invalid Credentials! or Server Down!");
         }
     }
 
-    const isSignIn = type === "sign-in"
+    const isSignIn = type === "sign-in";
 
     return (
         <div className="card-border lg:min-w-[566px]">
@@ -150,5 +145,4 @@ const AuthForm = ({ type }: { type: FormType }) => {
     );
 };
 
-
-export default AuthForm
+export default AuthForm;

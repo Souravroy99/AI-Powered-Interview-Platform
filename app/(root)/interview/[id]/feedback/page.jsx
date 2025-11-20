@@ -9,8 +9,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { getCurrentUser } from "@/lib/actions/auth.action";
 
-const Feedback = async ({ params }: RouteParams) => {
-  const { id } = await params;
+const Feedback = async ({ params }) => {
+  const { id } = params;
   const user = await getCurrentUser();
 
   const interview = await getUniqueInterviewById(id);
@@ -18,11 +18,12 @@ const Feedback = async ({ params }: RouteParams) => {
 
   const feedback = await getFeedbackByInterviewId({
     interviewId: id,
-    userId: user?.id!,
+    userId: user?.id,
   });
 
   return (
     <section className="section-feedback">
+
       <div className="flex flex-row justify-center">
         <h1 className="text-4xl font-semibold">
           Feedback on the Interview -{" "}
@@ -30,7 +31,7 @@ const Feedback = async ({ params }: RouteParams) => {
         </h1>
       </div>
 
-      <div className="flex flex-row justify-center ">
+      <div className="flex flex-row justify-center">
         <div className="flex flex-row gap-5">
 
           <div className="flex flex-row gap-2 items-center">
@@ -52,6 +53,7 @@ const Feedback = async ({ params }: RouteParams) => {
                 : "N/A"}
             </p>
           </div>
+
         </div>
       </div>
 
@@ -99,16 +101,14 @@ const Feedback = async ({ params }: RouteParams) => {
         </Button>
 
         <Button className="btn-primary flex-1">
-          <Link
-            href={`/interview/${id}`}
-            className="flex w-full justify-center"
-          >
+          <Link href={`/interview/${id}`} className="flex w-full justify-center">
             <p className="text-sm font-semibold text-black text-center">
               Retake Interview
             </p>
           </Link>
         </Button>
       </div>
+
     </section>
   );
 };

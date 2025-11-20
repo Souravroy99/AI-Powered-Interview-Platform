@@ -1,26 +1,27 @@
-import dayjs from 'dayjs'
-import Image from 'next/image';
-import { Button } from './ui/button';
-import Link from 'next/link';
-import { getRandomInterviewCover } from '@/lib/utils';
-import DisplayTechIcons from './DisplayTechIcons';
-import { getFeedbackByInterviewId } from '@/lib/actions/general.action';
+import dayjs from "dayjs";
+import Image from "next/image";
+import { Button } from "./ui/button";
+import Link from "next/link";
+import { getRandomInterviewCover } from "@/lib/utils";
+import DisplayTechIcons from "./DisplayTechIcons";
+import { getFeedbackByInterviewId } from "@/lib/actions/general.action";
 
-const InterviewCard = async ({ interviewId, userId, type, role, techstack, createdAt }: InterviewCardProps) => {
-  const feedback = (userId && interviewId) ? await getFeedbackByInterviewId({interviewId, userId}) : null ;
+const InterviewCard = async ({ interviewId, userId, type, role, techstack, createdAt }) => {
+  const feedback =
+    userId && interviewId
+      ? await getFeedbackByInterviewId({ interviewId, userId })
+      : null;
 
   const normalizedType = /mix/gi.test(type) ? "Mixed" : type;
-  const formattedDate = dayjs(feedback?.createdAt || createdAt || Date.now()).format("MMM D, YYYY")
+  const formattedDate = dayjs(
+    feedback?.createdAt || createdAt || Date.now()
+  ).format("MMM D, YYYY");
 
   return (
     <div className="card-border w-[360px] max-sm:w-full min-h-96">
       <div className="card-interview">
         <div>
-          <div
-            className={
-              "absolute top-0 right-0 w-fit px-4 py-2 rounded-bl-lg bg-violet-500"
-            }
-          >
+          <div className="absolute top-0 right-0 w-fit px-4 py-2 rounded-bl-lg bg-violet-500">
             <p className="badge-text text-[17px]">{normalizedType}</p>
           </div>
 
@@ -36,12 +37,7 @@ const InterviewCard = async ({ interviewId, userId, type, role, techstack, creat
 
           <div className="flex flex-row gap-5 mt-3">
             <div className="flex flex-row gap-2">
-              <Image
-                src="/calendar.svg"
-                width={22}
-                height={22}
-                alt="calendar"
-              />
+              <Image src="/calendar.svg" width={22} height={22} alt="calendar" />
               <p>{formattedDate}</p>
             </div>
 
@@ -77,4 +73,4 @@ const InterviewCard = async ({ interviewId, userId, type, role, techstack, creat
   );
 };
 
-export default InterviewCard
+export default InterviewCard;

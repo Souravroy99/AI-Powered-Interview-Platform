@@ -1,34 +1,26 @@
-import InterviewCard from '@/components/InterviewCard';
-import { Button } from '@/components/ui/button';
-import { getCurrentUser } from '@/lib/actions/auth.action';
-import { getInterviewsByUserId, getLatestInterviews } from '@/lib/actions/general.action';
-import Image from 'next/image';
-import Link from 'next/link';
-import React from 'react'
+import InterviewCard from "@/components/InterviewCard";
+import { Button } from "@/components/ui/button";
+import { getCurrentUser } from "@/lib/actions/auth.action";
+import {
+  getInterviewsByUserId,
+  getLatestInterviews,
+} from "@/lib/actions/general.action";
+import Image from "next/image";
+import Link from "next/link";
+import React from "react";
 
-const page = async () => {
+const Page = async () => {
   const user = await getCurrentUser();
 
-  /***/
-
-  // This two fetching may slow down each other
-  /*
-    const userInterviews = await getInterviewsByUserId( user?.id! ); // ! --> Sure that this field is exists
-    const latestInterviews = await getLatestInterviews({ userId: user?.id! }); 
-  */
-
-
-  // Optimization --> Parallel Fetching
-
+  // Parallel Fetching (no TS non-null operators)
   const [userInterviews, latestInterviews] = await Promise.all([
-      await getInterviewsByUserId( user?.id! ),
-      await getLatestInterviews({ userId: user?.id! })
-  ])
+    getInterviewsByUserId(user?.id),
+    getLatestInterviews({ userId: user?.id }),
+  ]);
 
-  /***/
-
-  const hasPastInterviews = userInterviews?.length! > 0
-  const hasUpcomingInterviews = latestInterviews?.length 
+  const hasPastInterviews = userInterviews && userInterviews.length > 0;
+  const hasUpcomingInterviews =
+    latestInterviews && latestInterviews.length > 0;
 
   return (
     <>
@@ -57,16 +49,21 @@ const page = async () => {
         <h2>Your Interviews</h2>
 
         <div className="interviews-section">
-          
           {hasPastInterviews ? (
-              userInterviews?.map((interview) => (
-                  <InterviewCard key={interview.id} userId={user?.id} interviewId={interview.id} role={interview.role} type={interview.type} techstack={interview.techstack} createdAt={interview.createdAt} />
-              ))
-            ) : (
-                  <p>You haven&apos;t taken any interviews yet</p>
-            )
-          }
-
+            userInterviews.map((interview) => (
+              <InterviewCard
+                key={interview.id}
+                userId={user?.id}
+                interviewId={interview.id}
+                role={interview.role}
+                type={interview.type}
+                techstack={interview.techstack}
+                createdAt={interview.createdAt}
+              />
+            ))
+          ) : (
+            <p>You haven&apos;t taken any interviews yet</p>
+          )}
         </div>
       </section>
 
@@ -74,8 +71,8 @@ const page = async () => {
         <h2>Take an Interview</h2>
 
         <div className="interviews-section">
-          { hasUpcomingInterviews ? (
-            latestInterviews?.map((interview) => (
+          {hasUpcomingInterviews ? (
+            latestInterviews.map((interview) => (
               <InterviewCard
                 key={interview.id}
                 userId={user?.id}
@@ -88,12 +85,11 @@ const page = async () => {
             ))
           ) : (
             <p>There are no interviews available</p>
-          )} 
-
+          )}
         </div>
       </section>
     </>
   );
-}
+};
 
-export default page
+export default Page;
