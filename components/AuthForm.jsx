@@ -1,4 +1,5 @@
 "use client"
+
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 
@@ -26,7 +27,7 @@ const authFormSchema = (type) => {
 const AuthForm = ({ type }) => {
     const router = useRouter();
     const formSchema = authFormSchema(type);
-
+ 
     const form = useForm({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -38,7 +39,8 @@ const AuthForm = ({ type }) => {
 
     async function onSubmit(values) {
         try {
-            if (type === "sign-in") {
+            if (type === "sign-in") 
+            {
                 const { email, password } = values;
                 const userCredential = await signInWithEmailAndPassword(auth, email, password);
 
@@ -56,7 +58,9 @@ const AuthForm = ({ type }) => {
 
                 toast.success("Signed in successfully! Welcome back.");
                 router.push("/");
-            } else {
+            } 
+            else 
+            {
                 const { name, email, password } = values;
 
                 const userCredentials = await createUserWithEmailAndPassword(auth, email, password);
@@ -76,8 +80,9 @@ const AuthForm = ({ type }) => {
                 toast.success("Account created successfully. Please sign in.");
                 router.push("/sign-in");
             }
-        } catch (error) {
-            console.log(error);
+        } 
+        catch (error) {
+            console.log(`Error is coming from AuthForm: ${error}`);
             toast.error("Invalid Credentials! or Server Down!");
         }
     }
@@ -102,32 +107,24 @@ const AuthForm = ({ type }) => {
                         {!isSignIn && (
                             <FormField
                                 control={form.control}
-                                name="name"          
-                                label="Name"
-                                placeholder="Your Name"
-                                type="text"
+                                name="name" label="Name" placeholder="Your Name" type="text"
                             />
                         )}
 
                         <FormField
-                            control={form.control}
-                            name="email"
-                            label="Email"
-                            placeholder="Your email address"
-                            type="email"
+                            control={form.control} 
+                            name="email" label="Email" placeholder="Your email address" type="email"
                         />
 
                         <FormField
-                            control={form.control}
-                            name="password"
-                            label="Password"
-                            placeholder="Enter your password"
-                            type="password"
+                            control={form.control} 
+                            name="password" label="Password" placeholder="Enter your password" type="password"
                         />
 
                         <Button className="btn" type="submit">
                             {isSignIn ? "Sign In" : "Create an Account"}
                         </Button>
+
                     </form>
                 </Form>
 

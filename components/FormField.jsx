@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input";
 
 const FormField = ({ control, name, label, placeholder, type = "text" }) => {
   return (
-    <Controller
+    <Controller 
       control={control}
       name={name}
       render={({ field }) => (
