@@ -9,7 +9,7 @@ const RootLayout = async ({ children }) => {
   if (!isUserAuthenticated) {
     redirect("/sign-in");
   }
-
+ 
   return (
     <div className="root-layout">
       <nav>

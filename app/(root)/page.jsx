@@ -18,11 +18,10 @@ const Page = async () => {
   ]);
 
   const hasPastInterviews = userInterviews && userInterviews.length > 0;
-  const hasUpcomingInterviews =
-    latestInterviews && latestInterviews.length > 0;
+  const hasUpcomingInterviews = latestInterviews && latestInterviews.length > 0;
 
   return (
-    <>
+    <> 
 
     {/* Header */}
       <section className="card-cta">
