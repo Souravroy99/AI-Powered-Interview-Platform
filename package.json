@@ -14,11 +14,7 @@
     "@hookform/resolvers": "^5.0.1",
     "@radix-ui/react-label": "^2.1.2",
     "@radix-ui/react-slot": "^1.1.2",
-<<<<<<< HEAD
     "@vapi-ai/web": "^2.5.2",
-=======
-    "@vapi-ai/web": "^2.2.5",
->>>>>>> 52f93039ff684b865e3a0ff6ce70c08550cc0786
     "ai": "^4.3.4",
     "autoprefixer": "^10.4.21",
     "class-variance-authority": "^0.7.1",
