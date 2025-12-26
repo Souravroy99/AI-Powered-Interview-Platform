@@ -24,17 +24,17 @@ const Agent = ({ userName, userId, type, interviewId, questions }) => {
 
   useEffect(() => {
     const onCallStart = () => {
-      callActive.current = true
+      // callActive.current = true
       setCallStatus(CallStatus.ACTIVE)
     }
 
     const onCallEnd = () => {
-      callActive.current = false
+      // callActive.current = false
       setCallStatus(CallStatus.FINISHED)
     }
 
     const onMessage = (message) => {
-      if (!callActive.current) return
+      // if (!callActive.current) return
 
       if (message.type === 'transcript' && message.transcriptType === 'final') {
         const newMessage = {
@@ -46,15 +46,17 @@ const Agent = ({ userName, userId, type, interviewId, questions }) => {
     }
 
     const onSpeechStart = () => {
-      if (callActive.current) setIsSpeaking(true)
+      // if (callActive.current) 
+        setIsSpeaking(true)
     }
 
     const onSpeechEnd = () => {
-      if (callActive.current) setIsSpeaking(false)
+      // if (callActive.current) 
+        setIsSpeaking(false)
     }
 
     const onError = (error) => {
-      console.error('Vapi error:', error)
+      console.log('Vapi error:', error)
     }
 
     vapi.on('call-start', onCallStart)
@@ -96,7 +98,8 @@ const Agent = ({ userName, userId, type, interviewId, questions }) => {
     if (callStatus === CallStatus.FINISHED) {
       if (type === 'generate') {
         router.push('/');
-      } else {
+      } 
+      else {
         handleGenerateFeedback(messages);
       }
     }
@@ -113,7 +116,9 @@ const Agent = ({ userName, userId, type, interviewId, questions }) => {
           userid: userId,
         }
       })
-    } else {
+    } 
+    else 
+    {
       let formattedQuestions = '';
       if (questions) {
         formattedQuestions = questions

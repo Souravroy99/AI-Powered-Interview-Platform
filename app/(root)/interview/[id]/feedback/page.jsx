@@ -21,6 +21,8 @@ const Feedback = async ({ params }) => {
     userId: user?.id,
   });
 
+  console.log(feedback)
+
   return (
     <section className="section-feedback">
 
