@@ -6,7 +6,7 @@ import {
   getLatestInterviews,
 } from "@/lib/actions/general.action";
 import Image from "next/image";
-import Link from "next/link";
+import Link from "next/link"; 
 import React from "react";
 
 const Page = async () => {

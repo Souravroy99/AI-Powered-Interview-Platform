@@ -142,8 +142,7 @@ const Agent = ({ userName, userId, type, interviewId, questions }) => {
 
   const latestMessage = messages[messages.length - 1]?.content
   const isCallInactiveOrFinished =
-    callStatus === CallStatus.INACTIVE ||
-    callStatus === CallStatus.FINISHED
+                        callStatus === CallStatus.INACTIVE || callStatus === CallStatus.FINISHED
 
   return (
     <>
@@ -170,20 +169,21 @@ const Agent = ({ userName, userId, type, interviewId, questions }) => {
         </div>
       </div>
 
-      {messages.length > 0 && (
-        <div className="transcript-border">
-          <div className="transcript">
-            <p
-              key={latestMessage}
-              className={cn(
-                'transition-opacity duration-500 opacity-0',
-                'animate-fadeIn opacity-100'
-              )}
-            >
-              {latestMessage}
-            </p>
+      {
+        messages.length > 0 && (
+          <div className="transcript-border">
+            <div className="transcript">
+              <p
+                key={latestMessage}
+                className={cn(
+                  'transition-opacity duration-500 opacity-0',
+                  'animate-fadeIn opacity-100'
+                )}
+              >
+                {latestMessage}
+              </p>
+            </div>
           </div>
-        </div>
       )}
 
       <div className='justify-center flex w-full'>
@@ -195,9 +195,11 @@ const Agent = ({ userName, userId, type, interviewId, questions }) => {
                 callStatus !== CallStatus.CONNECTING && "hidden"
               )}
             />
-            {isCallInactiveOrFinished ?
-              (<span>Call</span>) :
-              (<span className='text-black'>. . . . .</span>)
+            
+            {
+              isCallInactiveOrFinished 
+              ?  (<span>Call</span>) 
+              :  (<span className='text-black'>. . . . .</span>)
             }
           </button>
         ) : (
