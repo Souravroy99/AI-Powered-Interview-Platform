@@ -2,6 +2,7 @@ import dayjs from "dayjs";
 import Link from "next/link";
 import Image from "next/image";
 import { redirect } from "next/navigation";
+
 import {
   getFeedbackByInterviewId,
   getUniqueInterviewById,
@@ -10,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { getCurrentUser } from "@/lib/actions/auth.action";
 
 const Feedback = async ({ params }) => {
-  const { id } = params;
+  const { id } = await params;
   const user = await getCurrentUser();
 
   const interview = await getUniqueInterviewById(id);
@@ -21,92 +22,103 @@ const Feedback = async ({ params }) => {
     userId: user?.id,
   });
 
-  console.log(feedback)
+  if (!feedback) redirect("/");
+
+  /**
+   * ✅ Convert categoryScores object → array
+   */
+  const categoryScoresArray = feedback.categoryScores
+    ? Object.entries(feedback.categoryScores).map(([name, score]) => ({
+        name,
+        score,
+      }))
+    : [];
 
   return (
     <section className="section-feedback">
 
-      <div className="flex flex-row justify-center">
+      {/* HEADER */}
+      <div className="flex justify-center">
         <h1 className="text-4xl font-semibold">
-          Feedback on the Interview -{" "}
-          <span className="capitalize">{interview.role}</span> Interview
+          Feedback on the Interview –{" "}
+          <span className="capitalize">{interview.role}</span>
         </h1>
       </div>
 
-      <div className="flex flex-row justify-center">
-        <div className="flex flex-row gap-5">
+      {/* META */}
+      <div className="flex justify-center mt-4">
+        <div className="flex gap-6">
 
-          <div className="flex flex-row gap-2 items-center">
+          <div className="flex items-center gap-2">
             <Image src="/star.svg" width={22} height={22} alt="star" />
             <p>
-              Overall Impression:{" "}
+              Overall Score:{" "}
               <span className="text-primary-200 font-bold">
-                {feedback?.totalScore}
+                {feedback.totalScore}
               </span>
               /100
             </p>
           </div>
 
-          <div className="flex flex-row gap-2">
+          <div className="flex items-center gap-2">
             <Image src="/calendar.svg" width={22} height={22} alt="calendar" />
             <p>
-              {feedback?.createdAt
-                ? dayjs(feedback.createdAt).format("MMM D, YYYY h:mm A")
-                : "N/A"}
+              {dayjs(feedback.createdAt).format("MMM D, YYYY h:mm A")}
             </p>
           </div>
 
         </div>
       </div>
 
-      <hr />
+      <hr className="my-6" />
 
-      <p>{feedback?.finalAssessment}</p>
+      {/* FINAL ASSESSMENT */}
+      <p className="mb-6">{feedback.finalAssessment}</p>
 
+      {/* BREAKDOWN */}
       <div className="flex flex-col gap-4">
-        <h2>Breakdown of the Interview:</h2>
-        {feedback?.categoryScores?.map((category, index) => (
-          <div key={index}>
+        <h2 className="text-xl font-semibold">Breakdown of the Interview</h2>
+
+        {categoryScoresArray.map((category, index) => (
+          <div key={index} className="p-4 border rounded-md">
             <p className="font-bold">
               {index + 1}. {category.name} ({category.score}/100)
             </p>
-            <p>{category.comment}</p>
           </div>
         ))}
       </div>
 
-      <div className="flex flex-col gap-3">
-        <h3>Strengths</h3>
-        <ul>
-          {feedback?.strengths?.map((strength, index) => (
+      {/* STRENGTHS */}
+      <div className="flex flex-col gap-3 mt-6">
+        <h3 className="text-lg font-semibold">Strengths</h3>
+        <ul className="list-disc pl-5">
+          {feedback.strengths.map((strength, index) => (
             <li key={index}>{strength}</li>
           ))}
         </ul>
       </div>
 
-      <div className="flex flex-col gap-3">
-        <h3>Areas for Improvement</h3>
-        <ul>
-          {feedback?.areasForImprovement?.map((area, index) => (
+      {/* IMPROVEMENTS */}
+      <div className="flex flex-col gap-3 mt-6">
+        <h3 className="text-lg font-semibold">Areas for Improvement</h3>
+        <ul className="list-disc pl-5">
+          {feedback.areasForImprovement.map((area, index) => (
             <li key={index}>{area}</li>
           ))}
         </ul>
       </div>
 
-      <div className="buttons">
+      {/* ACTIONS */}
+      <div className="flex gap-4 mt-10">
         <Button className="btn-secondary flex-1">
-          <Link href="/" className="flex w-full justify-center">
-            <p className="text-sm font-semibold text-primary-200 text-center">
-              Back to dashboard
-            </p>
+          <Link href="/" className="w-full text-center">
+            Back to Dashboard
           </Link>
         </Button>
 
         <Button className="btn-primary flex-1">
-          <Link href={`/interview/${id}`} className="flex w-full justify-center">
-            <p className="text-sm font-semibold text-black text-center">
-              Retake Interview
-            </p>
+          <Link href={`/interview/${id}`} className="w-full text-center">
+            Retake Interview
           </Link>
         </Button>
       </div>

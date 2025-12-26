@@ -8,7 +8,7 @@ import { redirect } from 'next/navigation';
 import React from 'react';
 
 const Page = async ({ params }) => {
-  const { id } = params;
+  const { id } = await params;
   const user = await getCurrentUser();
   const interview = await getUniqueInterviewById(id);
 
@@ -38,7 +38,7 @@ const Page = async ({ params }) => {
       </div>
 
       <Agent
-        userName={user?.name || ''}
+        userName={user?.name || undefined}
         userId={user?.id}
         interviewId={id}
         type="interview"

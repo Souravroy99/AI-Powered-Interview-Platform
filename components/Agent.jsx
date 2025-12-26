@@ -58,7 +58,7 @@ const Agent = ({ userName, userId, type, interviewId, questions }) => {
     const onError = (error) => {
       console.log('Vapi error:', error)
     }
-
+ 
     vapi.on('call-start', onCallStart)
     vapi.on('call-end', onCallEnd)
     vapi.on('message', onMessage)
@@ -108,6 +108,8 @@ const Agent = ({ userName, userId, type, interviewId, questions }) => {
 
   const handleCall = async () => {
     setCallStatus(CallStatus.CONNECTING)
+
+    console.log(process.env.NEXT_PUBLIC_VAPI_WORKFLOW_ID)
 
     if (type === 'generate') {
       await vapi.start(process.env.NEXT_PUBLIC_VAPI_WORKFLOW_ID, {
