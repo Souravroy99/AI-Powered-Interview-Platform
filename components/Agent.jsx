@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 import { vapi } from '@/lib/vapi.sdk';
 import { interviewer } from '@/constants';
 import { createFeedback } from '@/lib/actions/general.action';
-
+ 
 const CallStatus = {
   INACTIVE: "INACTIVE",
   ACTIVE: "ACTIVE",
@@ -16,6 +16,9 @@ const CallStatus = {
 };
 
 const Agent = ({ userName, userId, type, interviewId, questions }) => {
+
+  console.log("VAPI: ", vapi)
+
   const router = useRouter()
   const [isSpeaking, setIsSpeaking] = useState(false)
   const [callStatus, setCallStatus] = useState(CallStatus.INACTIVE)
@@ -112,7 +115,7 @@ const Agent = ({ userName, userId, type, interviewId, questions }) => {
     console.log(process.env.NEXT_PUBLIC_VAPI_WORKFLOW_ID)
 
     if (type === 'generate') {
-      await vapi.start(process.env.NEXT_PUBLIC_VAPI_WORKFLOW_ID, {
+      await vapi.start({ assistantId: "40192a48-f2a7-463e-b331-cfaed047e635", 
         variableValues: {
           username: userName,
           userid: userId,
@@ -137,12 +140,14 @@ const Agent = ({ userName, userId, type, interviewId, questions }) => {
   }
 
   const handleDisconnect = async () => {
-    setCallStatus(CallStatus.FINISHED)
-    callActive.current = false
-
-    try {
+    try 
+    {
+      setCallStatus(CallStatus.FINISHED)
+      callActive.current = false
       vapi.stop()
-    } catch (err) {
+    } 
+    catch (err) 
+    {
       console.warn('Call already ended or failed to stop:', err.message)
     }
   }

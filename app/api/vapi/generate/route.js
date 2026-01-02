@@ -22,16 +22,19 @@ export const POST = async (request) => {
     const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
     // Build system + user messages for chat completion
-    const systemPrompt = `You are an interview question generator. OUTPUT MUST BE a single valid JSON array of strings, nothing else.
-Example: ["Question 1", "Question 2"].
-Do NOT include any extra text, punctuation like "/" or "*" that may break a voice assistant. Keep questions clear and short.`;
+    const systemPrompt = 
+      `You are an interview question generator. 
+      OUTPUT MUST BE a single valid JSON array of strings, nothing else.
+      Example: ["Question 1", "Question 2"].
+      Do NOT include any extra text, punctuation like "/" or "*" that may break a voice assistant. 
+      Keep questions clear and short.`;
 
     const userPrompt = `Prepare ${amount} interview questions.
-Role: ${role}
-Experience level: ${level}
-Tech stack: ${techstack}
-Focus: ${type}
-Return only a JSON array of questions (strings).`;
+                        Role: ${role}
+                        Experience level: ${level}
+                        Tech stack: ${techstack}
+                        Focus: ${type}
+                        Return only a JSON array of questions (strings).`;
 
     const resp = await groq.chat.completions.create({
       model: "llama-3.1-8b-instant",
@@ -39,47 +42,42 @@ Return only a JSON array of questions (strings).`;
         { role: "system", content: systemPrompt },
         { role: "user", content: userPrompt },
       ],
-      // tune as needed
       max_tokens: 800,
-      temperature: 0.2,
+      temperature: 0.3,
     });
 
     // Extract text safely
     const text = resp?.choices?.[0]?.message?.content ?? "";
-    let questions = null;
+    let questions = JSON.parse(text);
 
-    // Try parse direct JSON
-    try {
-      questions = JSON.parse(text);
-    } catch (e) {
-      // fallback: try to extract a JSON array substring
-      const m = text.match(/\[[\s\S]*\]/);
-      if (m) {
-        try {
-          questions = JSON.parse(m[0]);
-        } catch (e2) {
-          questions = null;
-        }
-      }
-    }
+    // // Try parse direct JSON
+    // try {
+    // } catch (e) {
+    //   // fallback: try to extract a JSON array substring
+    //   const m = text.match(/\[[\s\S]*\]/);
+    //   if (m) {
+    //     try {
+    //       questions = JSON.parse(m[0]);
+    //     } catch (e2) {
+    //       questions = null;
+    //     }
+    //   }
+    // }
 
-    if (!Array.isArray(questions)) {
-      console.log("Model output could not be parsed as array:", text);
-      return Response.json(
-        { success: false, error: "AI output parsing failed", raw: text },
-        { status: 500 }
-      );
-    }
+    // if (!Array.isArray(questions)) {
+    //   console.log("Model output could not be parsed as array:", text);
+    //   return Response.json(
+    //     { success: false, error: "AI output parsing failed", raw: text },
+    //     { status: 500 }
+    //   );
+    // }
 
-    
 
     const interview = {
       role,
       type,
       level,
-      techstack: Array.isArray(techstack)
-        ? techstack
-        : (techstack || "").split(",").map((s) => s.trim()).filter(Boolean),
+      techstack: (techstack || "").split(",").map((s) => s.trim()).filter(Boolean),
       questions,
       userId: userid,
       finalized: true,
@@ -91,7 +89,7 @@ Return only a JSON array of questions (strings).`;
 
     return Response.json({ success: true }, { status: 200 });
   } catch (error) {
-    console.log(`api/vapi/generate/Post: ${error}`);
+    console.log(`api-->vapi-->generate-->Post: ${error}`);
     // avoid leaking the whole error object to client
     return Response.json({ success: false, error: String(error) }, { status: 500 });
   }

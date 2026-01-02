@@ -13,7 +13,7 @@ const Page = async ({ params }) => {
   const interview = await getUniqueInterviewById(id);
 
   if (!interview) redirect('/');
-
+ 
   return (
     <>
       <div className="flex flex-row gap-4 justify-between">
