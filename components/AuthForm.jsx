@@ -57,7 +57,7 @@ const AuthForm = ({ type }) => {
                 });
 
                 toast.success("Signed in successfully! Welcome back.");
-                router.push("/");
+                router.push("/");  
             } 
             else 
             {
@@ -99,7 +99,7 @@ const AuthForm = ({ type }) => {
 
                 <h3>Practice job interviews with AI</h3>
 
-                <Form {...form}>
+                <Form {...form}> 
                     <form
                         onSubmit={form.handleSubmit(onSubmit)}
                         className="w-full space-y-6 mt-4 form"
