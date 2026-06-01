@@ -3,7 +3,7 @@ import "./globals.css";
 import { Toaster } from "sonner";
 
 export const metadata = {
-  title: "AiView",
+  title: "MediChat",
   description: "An AI-powered platform for preparing for mock interview",
   icons: {
     icon: "/robot.png",

@@ -2,10 +2,8 @@
 
 import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
-import { cn } from '@/lib/utils'
 import { vapi } from '@/lib/vapi.sdk'
-import { saveMedicalSummary } from '@/lib/actions/general.action';
-
+import { saveMedicalSummary } from '@/lib/actions/general.action'
 
 const CallStatus = {
   INACTIVE: 'INACTIVE',
@@ -28,16 +26,6 @@ const Agent = ({ userName, userId }) => {
     const onCallEnd = async () => {
       console.log('Call ended')
       setCallStatus(CallStatus.FINISHED)
-
-      // ===================================================
-      // LATER:
-      // Send messages to your server action here
-      //
-      // await saveMedicalSummary({
-      //   userId,
-      //   transcript: messages
-      // })
-      // ===================================================
     }
 
     const onMessage = (message) => {
@@ -84,35 +72,33 @@ const Agent = ({ userName, userId }) => {
     }
   }, [messages, userId])
 
-
   useEffect(() => {
-  const saveConversation = async () => {
-    if (
-      callStatus === CallStatus.FINISHED &&
-      messages.length > 0
-    ) {
-      try {
-        const result = await saveMedicalSummary({
-          userId,
-          transcript: messages,
-        });
+    const saveConversation = async () => {
+      if (
+        callStatus === CallStatus.FINISHED &&
+        messages.length > 0
+      ) {
+        try {
+          const result = await saveMedicalSummary({
+            userId,
+            transcript: messages,
+          })
 
-        console.log(
-          "Medical summary saved:",
-          result
-        );
-      } catch (error) {
-        console.error(
-          "Failed to save medical summary:",
-          error
-        );
+          console.log(
+            'Medical summary saved:',
+            result
+          )
+        } catch (error) {
+          console.error(
+            'Failed to save medical summary:',
+            error
+          )
+        }
       }
     }
-  };
 
-  saveConversation();
-}, [callStatus]);
-
+    saveConversation()
+  }, [callStatus, messages, userId])
 
   const handleCall = async () => {
     try {
@@ -188,10 +174,7 @@ const Agent = ({ userName, userId }) => {
           <div className='transcript'>
             <p
               key={latestMessage}
-              className={cn(
-                'transition-opacity duration-500 opacity-0',
-                'animate-fadeIn opacity-100'
-              )}
+              className='transition-opacity duration-500 opacity-0 animate-fadeIn opacity-100'
             >
               {latestMessage}
             </p>
@@ -206,11 +189,11 @@ const Agent = ({ userName, userId }) => {
             onClick={handleCall}
           >
             <span
-              className={cn(
-                'absolute animate-ping rounded-full opacity-75',
-                callStatus !== CallStatus.CONNECTING &&
-                  'hidden'
-              )}
+              className={`absolute animate-ping rounded-full opacity-75 ${
+                callStatus !== CallStatus.CONNECTING
+                  ? 'hidden'
+                  : ''
+              }`}
             />
 
             {isCallInactiveOrFinished ? (

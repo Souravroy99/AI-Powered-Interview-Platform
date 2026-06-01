@@ -3,68 +3,60 @@ import Link from "next/link";
 import Image from "next/image";
 import { redirect } from "next/navigation";
 
-import {
-  getFeedbackByInterviewId,
-  getUniqueInterviewById,
-} from "@/lib/actions/general.action";
+import { getUniqueInterviewById } from "@/lib/actions/general.action";
 import { Button } from "@/components/ui/button";
-import { getCurrentUser } from "@/lib/actions/auth.action";
 
-const Feedback = async ({ params }) => {
+const feedback = async ({ params }) => {
   const { id } = await params;
-  const user = await getCurrentUser();
 
-  const interview = await getUniqueInterviewById(id);
-  if (!interview) redirect("/");
+  const chat = await getUniqueInterviewById(id);
 
-  const feedback = await getFeedbackByInterviewId({
-    interviewId: id,
-    userId: user?.id,
-  });
-
-  if (!feedback) redirect("/");
-
-  /**
-   * ✅ Convert categoryScores object → array
-   */
-  const categoryScoresArray = feedback.categoryScores
-    ? Object.entries(feedback.categoryScores).map(([name, score]) => ({
-        name,
-        score,
-      }))
-    : [];
+  if (!chat) redirect("/");
 
   return (
     <section className="section-feedback">
 
-      {/* HEADER */}
+      {/* Header */}
       <div className="flex justify-center">
-        <h1 className="text-4xl font-semibold">
-          Feedback on the Interview –{" "}
-          <span className="capitalize">{interview.role}</span>
+        <h1 className="text-4xl font-semibold text-center">
+          Medical Consultation Summary
         </h1>
       </div>
 
-      {/* META */}
-      <div className="flex justify-center mt-4">
-        <div className="flex gap-6">
+      {/* Meta */}
+      <div className="flex justify-center mt-6">
+        <div className="flex gap-6 flex-wrap">
 
           <div className="flex items-center gap-2">
-            <Image src="/star.svg" width={22} height={22} alt="star" />
+            <Image
+              src="/calendar.svg"
+              width={22}
+              height={22}
+              alt="calendar"
+            />
             <p>
-              Overall Score:{" "}
-              <span className="text-primary-200 font-bold">
-                {feedback.totalScore}
-              </span>
-              /100
+              {dayjs(chat.createdAt).format(
+                "MMM D, YYYY h:mm A"
+              )}
             </p>
           </div>
 
           <div className="flex items-center gap-2">
-            <Image src="/calendar.svg" width={22} height={22} alt="calendar" />
-            <p>
-              {dayjs(feedback.createdAt).format("MMM D, YYYY h:mm A")}
-            </p>
+            <span className="font-semibold">
+              Severity:
+            </span>
+
+            <span
+              className={`px-3 py-1 rounded-full text-sm ${
+                chat.severityLevel === "mild"
+                  ? "bg-green-500/20 text-green-400"
+                  : chat.severityLevel === "moderate"
+                  ? "bg-yellow-500/20 text-yellow-400"
+                  : "bg-red-500/20 text-red-400"
+              }`}
+            >
+              {chat.severityLevel}
+            </span>
           </div>
 
         </div>
@@ -72,59 +64,113 @@ const Feedback = async ({ params }) => {
 
       <hr className="my-6" />
 
-      {/* FINAL ASSESSMENT */}
-      <p className="mb-6">{feedback.finalAssessment}</p>
+      {/* Chief Complaint */}
+      <div className="mb-8">
+        <h2 className="text-xl font-semibold mb-3">
+          Chief Complaint
+        </h2>
 
-      {/* BREAKDOWN */}
-      <div className="flex flex-col gap-4">
-        <h2 className="text-xl font-semibold">Breakdown of the Interview</h2>
-
-        {categoryScoresArray.map((category, index) => (
-          <div key={index} className="p-4 border rounded-md">
-            <p className="font-bold">
-              {index + 1}. {category.name} ({category.score}/100)
-            </p>
-          </div>
-        ))}
+        <p>{chat.chiefComplaint}</p>
       </div>
 
-      {/* STRENGTHS */}
-      <div className="flex flex-col gap-3 mt-6">
-        <h3 className="text-lg font-semibold">Strengths</h3>
+      {/* Summary */}
+      <div className="mb-8">
+        <h2 className="text-xl font-semibold mb-3">
+          Summary
+        </h2>
+
+        <p>{chat.summary}</p>
+      </div>
+
+      {/* Symptoms */}
+      <div className="mb-8">
+        <h2 className="text-xl font-semibold mb-3">
+          Symptoms
+        </h2>
+
         <ul className="list-disc pl-5">
-          {feedback.strengths.map((strength, index) => (
-            <li key={index}>{strength}</li>
+          {chat.symptoms?.map((symptom, index) => (
+            <li key={index}>{symptom}</li>
           ))}
         </ul>
       </div>
 
-      {/* IMPROVEMENTS */}
-      <div className="flex flex-col gap-3 mt-6">
-        <h3 className="text-lg font-semibold">Areas for Improvement</h3>
+      {/* Possible Conditions */}
+      <div className="mb-8">
+        <h2 className="text-xl font-semibold mb-3">
+          Possible Conditions
+        </h2>
+
         <ul className="list-disc pl-5">
-          {feedback.areasForImprovement.map((area, index) => (
-            <li key={index}>{area}</li>
-          ))}
+          {chat.possibleConditions?.map(
+            (condition, index) => (
+              <li key={index}>{condition}</li>
+            )
+          )}
         </ul>
       </div>
 
-      {/* ACTIONS */}
+      {/* Recommendations */}
+      <div className="mb-8">
+        <h2 className="text-xl font-semibold mb-3">
+          Recommendations
+        </h2>
+
+        <ul className="list-disc pl-5">
+          {chat.recommendations?.map(
+            (recommendation, index) => (
+              <li key={index}>{recommendation}</li>
+            )
+          )}
+        </ul>
+      </div>
+
+      {/* Transcript */ }
+      {/* 
+      <div className="mb-8">
+        <h2 className="text-xl font-semibold mb-3">
+          Conversation Transcript
+        </h2>
+
+        <div className="flex flex-col gap-3">
+          {chat.transcript?.map((message, index) => (
+            <div
+              key={index}
+              className="p-3 border rounded-lg"
+            >
+              <p className="font-semibold capitalize">
+                {message.role}
+              </p>
+
+              <p>{message.content}</p>
+            </div>
+          ))}
+        </div>
+      </div> */}
+
+      {/* Actions */}
       <div className="flex gap-4 mt-10">
-        <Button className="btn-secondary flex-1">
-          <Link href="/" className="w-full text-center">
+        <button className="btn-secondary flex-1">
+          <Link
+            href="/"
+            className="w-full text-center"
+          >
             Back to Dashboard
           </Link>
-        </Button>
+        </button>
 
-        <Button className="btn-primary flex-1">
-          <Link href={`/interview/${id}`} className="w-full text-center">
-            Retake Interview
+        <button className="btn-primary flex-1">
+          <Link
+            href="/interview"
+            className="w-full text-center"
+          >
+            Start New Consultation
           </Link>
-        </Button>
+        </button>
       </div>
 
     </section>
   );
 };
 
-export default Feedback;
+export default feedback;
